@@ -7,3 +7,7 @@ lazy val root = (project in file("."))
     name := "zionomicon_book_practice",
     idePackagePrefix := Some("edu.zionomicon")
   )
+
+libraryDependencies ++= Seq(
+  "dev.zio" %% "zio" % "2.1.17"
+)
