@@ -6,7 +6,10 @@ You can get a free copy of the book the [official website](https://www.zionomico
 *Image from the book website*
 
 ## Subjects :
-- Essentials
+- Essentials :
+  - First steps with ZIO
+  - Testing with ZIO
+  - Integrating third party libraries with ZIO
 - Concurrency & Parallelism
 - Concurrent Structures
 - Resource Handling
@@ -18,6 +21,12 @@ You can get a free copy of the book the [official website](https://www.zionomico
 - Observability
 - Testing
 - Applications : Parallel Web Crawler
+
+## Repository structure :
+- `Package` by *subject*
+- Two `sub-packages` inside each subject :
+  - `chapter` package : practicing chapter code
+  - `exercices` package : solving exercices (at the end of each chapter there is a list of exercices to solve)
 
 ## Technologies :
 - Scala 2.13
