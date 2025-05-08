@@ -5,6 +5,8 @@ You can get a free copy of the book the [official website](https://www.zionomico
 ![Cover](https://www.zionomicon.com/images/min/book-img.png)
 *Image from the book website*
 
+This repository is based on the book version : *Edition May 2 2025*
+
 ## Subjects :
 - Essentials :
   - First steps with ZIO
