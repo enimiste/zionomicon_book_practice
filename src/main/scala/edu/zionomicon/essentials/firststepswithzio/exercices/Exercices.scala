@@ -124,12 +124,18 @@ object Exercices extends zio.ZIOAppDefault {
                              in: Iterable[ZIO[R, E, A]]
                            ): ZIO[R, E, List[A]] =
       ZIO(r => {
-        Right(in.foldLeft(List.empty[A])((list, zio) => zio.run(r).fold(_ => list, a => a :: list)))
+        Right(in.foldRight(List.empty[A])((zio, list) => zio.run(r).fold(_ => list, a => a :: list)))
       })
   }
 
   object Exercice8 {
 
+    import Exercice6._
+
+    def foreach[R, E, A, B](in: Iterable[A])(f: A => ZIO[R, E, B]): ZIO[R, E, List[B]] =
+      ZIO(r => {
+        Right(in.foldRight(List.empty[B])((a, list) => f(a).run(r).fold(_ => list, b => b :: list)))
+      })
   }
 
   object Exercice9 {
@@ -190,6 +196,11 @@ object Exercices extends zio.ZIOAppDefault {
       import Exercice6._
       import Exercice7._
       collectAll[Int, String, Int](List(ZIO(_ => Right(1)), ZIO(_ => Left("Error")), ZIO(_ => Right(2)))).run(0).fold(println, println)
+    }
+    { //Using foreach
+      import Exercice6._
+      import Exercice8._
+      foreach[Int, String, Int, Double](1 to 10)(i => ZIO(r => if (i == 4) Left("Error") else Right(i / 2.0))).run(0).fold(println, println)
     }
   })
 
