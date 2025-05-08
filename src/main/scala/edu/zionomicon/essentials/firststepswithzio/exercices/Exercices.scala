@@ -1,8 +1,7 @@
 package edu.zionomicon
 package edu.zionomicon.essentials.firststepswithzio.exercices
 
-
-object Exercices {
+object Exercices extends zio.ZIOAppDefault {
   object Exercice1 {
 
     import zio.ZIO
@@ -112,6 +111,15 @@ object Exercices {
 
     import Exercice6._
 
+    /**
+     * Collects in a list the results of successful ZIO effect (ignoring errors)
+     *
+     * @param in
+     * @tparam R
+     * @tparam E
+     * @tparam A
+     * @return
+     */
     def collectAll[R, E, A](
                              in: Iterable[ZIO[R, E, A]]
                            ): ZIO[R, E, List[A]] =
@@ -171,5 +179,18 @@ object Exercices {
   object Exercice20 {
 
   }
+
+
+  override def run: zio.ZIO[Any with zio.ZIOAppArgs with zio.Scope, Any, Any] = zio.ZIO.attempt({
+    { //Using zipWith
+      import Exercice6._
+      zipWith[Int, String, Int, Int, Int](ZIO(_ => Right(1)), ZIO(_ => Right(3)))((a, b) => a + b).run(0).fold(println, println)
+    }
+    { //Using collectAll
+      import Exercice6._
+      import Exercice7._
+      collectAll[Int, String, Int](List(ZIO(_ => Right(1)), ZIO(_ => Left("Error")), ZIO(_ => Right(2)))).run(0).fold(println, println)
+    }
+  })
 
 }
