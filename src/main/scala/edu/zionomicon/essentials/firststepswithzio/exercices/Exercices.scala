@@ -154,6 +154,18 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice10 {
 
+    import zio._
+    import Exercice1._
+
+    object Cat extends ZIOAppDefault {
+      def run = {
+        //getArgs.flatMap(files => ZIO.foreach(files)(readFileZio).map(println))
+        for {
+          args <- getArgs
+          _ <- ZIO.foreach(args)(file => readFileZio(file).map(println))
+        } yield ()
+      }
+    }
   }
 
   object Exercice11 {
