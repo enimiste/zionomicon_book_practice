@@ -1,10 +1,12 @@
 package edu.zionomicon
 package edu.zionomicon.essentials.firststepswithzio.exercices
 
-import zio.ZIO
 
 object Exercices {
   object Exercice1 {
+
+    import zio.ZIO
+
     def readFile(file: String): String = {
       val source = scala.io.Source.fromFile(file)
       try source.getLines().mkString
@@ -15,6 +17,8 @@ object Exercices {
   }
 
   object Exercice2 {
+
+    import zio.ZIO
 
     def writeFile(file: String, text: String): Unit = {
       import java.io._
@@ -42,6 +46,9 @@ object Exercices {
   }
 
   object Exercice4 {
+
+    import zio.ZIO
+
     def printLine(line: String) = ZIO.attempt(println(line))
 
     val readLine = ZIO.attempt(scala.io.StdIn.readLine())
@@ -60,6 +67,9 @@ object Exercices {
   }
 
   object Exercice5 {
+
+    import zio.ZIO
+
     val random = ZIO.attempt(scala.util.Random.nextInt(3) + 1)
 
     def printLine(line: String) = ZIO.attempt(println(line))
@@ -83,10 +93,31 @@ object Exercices {
 
   object Exercice6 {
 
+    final case class ZIO[-R, +E, +A](run: R => Either[E, A])
+
+    def zipWith[R, E, A, B, C](
+                                self: ZIO[R, E, A],
+                                that: ZIO[R, E, B]
+                              )(f: (A, B) => C): ZIO[R, E, C] =
+      ZIO(r => {
+        //self.run(r).flatMap(a => that.run(r).map(b => f(a, b)))
+        for {
+          a <- self.run(r)
+          b <- that.run(r)
+        } yield f(a, b)
+      })
   }
 
   object Exercice7 {
 
+    import Exercice6._
+
+    def collectAll[R, E, A](
+                             in: Iterable[ZIO[R, E, A]]
+                           ): ZIO[R, E, List[A]] =
+      ZIO(r => {
+        Right(in.foldLeft(List.empty[A])((list, zio) => zio.run(r).fold(_ => list, a => a :: list)))
+      })
   }
 
   object Exercice8 {
