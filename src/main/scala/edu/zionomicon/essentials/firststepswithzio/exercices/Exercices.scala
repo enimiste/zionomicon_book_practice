@@ -113,12 +113,6 @@ object Exercices extends zio.ZIOAppDefault {
 
     /**
      * Collects in a list the results of successful ZIO effect (ignoring errors)
-     *
-     * @param in
-     * @tparam R
-     * @tparam E
-     * @tparam A
-     * @return
      */
     def collectAll[R, E, A](
                              in: Iterable[ZIO[R, E, A]]
@@ -132,6 +126,9 @@ object Exercices extends zio.ZIOAppDefault {
 
     import Exercice6._
 
+    /**
+     * Collects in a list the results of successful ZIO effects (ignoring errors)
+     */
     def foreach[R, E, A, B](in: Iterable[A])(f: A => ZIO[R, E, B]): ZIO[R, E, List[B]] =
       ZIO(r => {
         Right(in.foldRight(List.empty[B])((a, list) => f(a).run(r).fold(_ => list, b => b :: list)))
@@ -140,6 +137,19 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice9 {
 
+    import Exercice6._
+
+    /**
+     * The function should return an effect that tries the left-hand side, but if that effect fails,
+     * it will fall back to the effect on the right-hand side.
+     */
+    def orElse[R, E1, E2, A](self: ZIO[R, E1, A], that: ZIO[R, E2, A]): ZIO[R, E2, A] =
+      ZIO(r => {
+        self.run(r) match {
+          case Right(r) => Right(r)
+          case Left(_) => that.run(r)
+        }
+      })
   }
 
   object Exercice10 {
@@ -201,6 +211,12 @@ object Exercices extends zio.ZIOAppDefault {
       import Exercice6._
       import Exercice8._
       foreach[Int, String, Int, Double](1 to 10)(i => ZIO(r => if (i == 4) Left("Error") else Right(i / 2.0))).run(0).fold(println, println)
+    }
+    { //Using orElse
+      import Exercice6._
+      import Exercice9._
+      orElse[Int, String, Int, Double](ZIO(r => Right(1)), ZIO(r => Right(2))).run(0).fold(println, println)
+      orElse[Int, String, Int, Double](ZIO(r => Left("Error")), ZIO(r => Right(2))).run(0).fold(println, println)
     }
   })
 
