@@ -189,10 +189,26 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice13 {
 
+    import zio._
+
+    def currentTime(): Long = java.lang.System.currentTimeMillis()
+
+    lazy val currentTimeZIO: ZIO[Any, Nothing, Long] = ZIO.succeed(currentTime())
   }
 
   object Exercice14 {
 
+    import zio._
+
+    def getCacheValue(
+                       key: String,
+                       onSuccess: String => Unit,
+                       onFailure: Throwable => Unit): Unit = ???
+
+    def getCacheValueZio(key: String): ZIO[Any, Throwable,
+      String] = ZIO.async(callback => {
+      getCacheValue(key, value => callback(ZIO.succeed(value)), err => ZIO.fail(err))
+    })
   }
 
   object Exercice15 {
