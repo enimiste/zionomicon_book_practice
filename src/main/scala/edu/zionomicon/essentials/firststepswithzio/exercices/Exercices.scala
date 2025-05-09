@@ -258,6 +258,18 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice18 {
 
+    import zio._
+
+    object NumberGuessing extends ZIOAppDefault {
+      val run = for {
+        number <- Random.nextIntBetween(1, 4)
+        guessStr <- Console.readLine("Guess a number between 1 and 3 ? ")
+        guess = guessStr.toInt
+        _ <- if (guess < number) Console.printLine(s"Your guess $guess is less than the number !")
+        else if (guess > number) Console.printLine(s"Your guess $guess is greater than the number !")
+        else Console.printLine(s"You win $number :)")
+      } yield ()
+    }
   }
 
   object Exercice19 {
@@ -296,6 +308,9 @@ object Exercices extends zio.ZIOAppDefault {
     { //Using HelloHumain
       import Exercice17._
       HelloHuman.run
+    } *> { //Using NumberGuessing
+      import Exercice18._
+      NumberGuessing.run
     }
   }
 
