@@ -229,6 +229,18 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice16 {
 
+    import zio._
+    import scala.concurrent.{ExecutionContext, Future}
+
+    trait Query
+
+    trait Result
+
+    def doQuery(query: Query)(implicit ec: ExecutionContext
+    ): Future[Result] = ???
+
+    def doQueryZio(query: Query): ZIO[Any, Throwable, Result] =
+      ZIO.fromFuture(implicit ec => doQuery(query))
   }
 
   object Exercice17 {
