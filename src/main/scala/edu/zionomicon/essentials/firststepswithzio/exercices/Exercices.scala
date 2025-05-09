@@ -181,6 +181,10 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice12 {
 
+    import zio._
+
+    def listToZIO[A](list: List[A]): ZIO[Any, None.type, A] =
+      if (list.isEmpty) ZIO.fail(None) else ZIO.succeed(list.head)
   }
 
   object Exercice13 {
