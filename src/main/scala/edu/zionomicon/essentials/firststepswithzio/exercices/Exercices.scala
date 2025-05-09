@@ -245,6 +245,15 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice17 {
 
+    import zio._
+
+    object HelloHuman extends ZIOAppDefault {
+      val run = for {
+        _ <- Console.printLine("Please type your name :")
+        name <- Console.readLine
+        _ <- Console.printLine(s"Hey $name !")
+      } yield ()
+    }
   }
 
   object Exercice18 {
@@ -260,27 +269,34 @@ object Exercices extends zio.ZIOAppDefault {
   }
 
 
-  override def run: zio.ZIO[Any with zio.ZIOAppArgs with zio.Scope, Any, Any] = zio.ZIO.attempt({
-    { //Using zipWith
-      import Exercice6._
-      zipWith[Int, String, Int, Int, Int](ZIO(_ => Right(1)), ZIO(_ => Right(3)))((a, b) => a + b).run(0).fold(println, println)
+  override def run: zio.ZIO[Any with zio.ZIOAppArgs with zio.Scope, Any, Any] = { //Toy model ZIO instances
+    zio.ZIO.attempt({
+      { //Using zipWith
+        import Exercice6._
+        zipWith[Int, String, Int, Int, Int](ZIO(_ => Right(1)), ZIO(_ => Right(3)))((a, b) => a + b).run(0).fold(println, println)
+      }
+      { //Using collectAll
+        import Exercice6._
+        import Exercice7._
+        collectAll[Int, String, Int](List(ZIO(_ => Right(1)), ZIO(_ => Left("Error")), ZIO(_ => Right(2)))).run(0).fold(println, println)
+      }
+      { //Using foreach
+        import Exercice6._
+        import Exercice8._
+        foreach[Int, String, Int, Double](1 to 10)(i => ZIO(r => if (i == 4) Left("Error") else Right(i / 2.0))).run(0).fold(println, println)
+      }
+      { //Using orElse
+        import Exercice6._
+        import Exercice9._
+        orElse[Int, String, Int, Double](ZIO(r => Right(1)), ZIO(r => Right(2))).run(0).fold(println, println)
+        orElse[Int, String, Int, Double](ZIO(r => Left("Error")), ZIO(r => Right(2))).run(0).fold(println, println)
+      }
+    })
+  } *> { //Normal ZIO
+    { //Using HelloHumain
+      import Exercice17._
+      HelloHuman.run
     }
-    { //Using collectAll
-      import Exercice6._
-      import Exercice7._
-      collectAll[Int, String, Int](List(ZIO(_ => Right(1)), ZIO(_ => Left("Error")), ZIO(_ => Right(2)))).run(0).fold(println, println)
-    }
-    { //Using foreach
-      import Exercice6._
-      import Exercice8._
-      foreach[Int, String, Int, Double](1 to 10)(i => ZIO(r => if (i == 4) Left("Error") else Right(i / 2.0))).run(0).fold(println, println)
-    }
-    { //Using orElse
-      import Exercice6._
-      import Exercice9._
-      orElse[Int, String, Int, Double](ZIO(r => Right(1)), ZIO(r => Right(2))).run(0).fold(println, println)
-      orElse[Int, String, Int, Double](ZIO(r => Left("Error")), ZIO(r => Right(2))).run(0).fold(println, println)
-    }
-  })
+  }
 
 }
