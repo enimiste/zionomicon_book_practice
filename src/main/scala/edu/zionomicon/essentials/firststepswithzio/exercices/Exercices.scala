@@ -1,6 +1,8 @@
 package edu.zionomicon
 package edu.zionomicon.essentials.firststepswithzio.exercices
 
+import zio.Random
+
 object Exercices extends zio.ZIOAppDefault {
   object Exercice1 {
 
@@ -277,7 +279,7 @@ object Exercices extends zio.ZIOAppDefault {
 
         for {
           number <- Random.nextIntBetween(1, 10)
-          _ <- Console.printLine(s"Guess a number between 1 and 9 : $number")
+          _ <- Console.printLine(s"Guess a number between 1 and 9")
           _ <- game(number)
         } yield ()
       }
@@ -312,6 +314,13 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice20 {
 
+    import zio._
+
+    def doWhile[R, E, A](body: ZIO[R, E, A])(condition: A => Boolean): ZIO[R, E, A] =
+      for {
+        a <- body
+        r <- if (!condition(a)) ZIO.succeed(a) else doWhile(body)(condition)
+      } yield r
   }
 
 
@@ -347,7 +356,16 @@ object Exercices extends zio.ZIOAppDefault {
       NumberGuessing.run
     } *> { //Using ReadUntil
       import Exercice19._
-      readUntil(txt => txt.toLowerCase.contains("true"))
+      zio.Console.printLine("Type the word true") *>
+        readUntil(txt => txt.toLowerCase.contains("true"))
+    } *> { //Using doWhile
+      import Exercice20._
+      doWhile((
+        for {
+          num <- zio.Random.nextIntBounded(75)
+          _ <- zio.Console.printLine(s"Random : $num")
+        } yield num
+        ))(_ < 70)
     }
   }
 
