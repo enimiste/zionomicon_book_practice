@@ -207,12 +207,24 @@ object Exercices extends zio.ZIOAppDefault {
 
     def getCacheValueZio(key: String): ZIO[Any, Throwable,
       String] = ZIO.async(callback => {
-      getCacheValue(key, value => callback(ZIO.succeed(value)), err => ZIO.fail(err))
+      getCacheValue(key, value => callback(ZIO.succeed(value)), err => callback(ZIO.fail(err)))
     })
   }
 
   object Exercice15 {
 
+    import zio._
+
+    trait User
+
+    def saveUserRecord(
+                        user: User,
+                        onSuccess: () => Unit,
+                        onFailure: Throwable => Unit
+                      ): Unit = ???
+
+    def saveUserRecordZio(user: User): ZIO[Any, Throwable, Unit]
+    = ZIO.async(callback => saveUserRecord(user, () => callback(ZIO.succeed(())), err => callback(ZIO.fail(err))))
   }
 
   object Exercice16 {
