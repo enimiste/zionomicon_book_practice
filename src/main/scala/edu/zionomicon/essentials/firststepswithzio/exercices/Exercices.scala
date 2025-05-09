@@ -260,15 +260,37 @@ object Exercices extends zio.ZIOAppDefault {
 
     import zio._
 
+    import java.io.IOException
+
     object NumberGuessing extends ZIOAppDefault {
-      val run = for {
-        number <- Random.nextIntBetween(1, 4)
-        guessStr <- Console.readLine("Guess a number between 1 and 3 ? ")
-        guess = guessStr.toInt
-        _ <- if (guess < number) Console.printLine(s"Your guess $guess is less than the number !")
-        else if (guess > number) Console.printLine(s"Your guess $guess is greater than the number !")
-        else Console.printLine(s"You win $number :)")
-      } yield ()
+      val run = oneRound
+
+      private def playUntilGuessed: ZIO[Any, IOException, Unit] = {
+        def game(numberToGuess: Int): ZIO[Any, IOException, Unit] =
+          for {
+            guessStr <- Console.readLine("Your guess : ")
+            guess = guessStr.toInt
+            _ <- if (guess < numberToGuess) Console.printLine(s"Your guess $guess is less than the number !") *> game(numberToGuess)
+            else if (guess > numberToGuess) Console.printLine(s"Your guess $guess is greater than the number !") *> game(numberToGuess)
+            else Console.printLine(s"You win $numberToGuess :)")
+          } yield ()
+
+        for {
+          number <- Random.nextIntBetween(1, 10)
+          _ <- Console.printLine(s"Guess a number between 1 and 9 : $number")
+          _ <- game(number)
+        } yield ()
+      }
+
+      private lazy val oneRound: ZIO[Any, IOException, Unit] =
+        for {
+          number <- Random.nextIntBetween(1, 4)
+          guessStr <- Console.readLine("Guess a number between 1 and 3 ? ")
+          guess = guessStr.toInt
+          _ <- if (guess < number) Console.printLine(s"Your guess $guess is less than the number !")
+          else if (guess > number) Console.printLine(s"Your guess $guess is greater than the number !")
+          else Console.printLine(s"You win $number :)")
+        } yield ()
     }
   }
 
