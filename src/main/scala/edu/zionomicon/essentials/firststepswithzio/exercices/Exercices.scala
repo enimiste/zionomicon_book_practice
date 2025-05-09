@@ -170,6 +170,13 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice11 {
 
+    import zio._
+
+    def eitherToZIO[E, A](either: Either[E, A]): ZIO[Any, E, A]
+    = either match {
+      case Right(r) => ZIO.succeed(r)
+      case Left(err) => ZIO.fail(err)
+    }
   }
 
   object Exercice12 {
