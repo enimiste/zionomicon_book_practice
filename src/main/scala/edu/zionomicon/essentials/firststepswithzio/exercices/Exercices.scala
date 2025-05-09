@@ -274,6 +274,18 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice19 {
 
+    import zio._
+
+    import java.io.IOException
+
+    def readUntil(
+                   acceptInput: String => Boolean
+                 ): ZIO[Any, IOException, String] =
+      for {
+        input <- Console.readLine("Type something :")
+        result <- if (acceptInput(input)) ZIO.succeed(input)
+        else readUntil(acceptInput)
+      } yield result
   }
 
   object Exercice20 {
@@ -311,6 +323,9 @@ object Exercices extends zio.ZIOAppDefault {
     } *> { //Using NumberGuessing
       import Exercice18._
       NumberGuessing.run
+    } *> { //Using ReadUntil
+      import Exercice19._
+      readUntil(txt => txt.toLowerCase.contains("true"))
     }
   }
 
