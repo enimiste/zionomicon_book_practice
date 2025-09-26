@@ -1,4 +1,4 @@
-package edu.zionomicon.essentials.firststepswithzio.exercices
+package edu.zionomicon.ch01_firststepswithzio.exercices
 
 import zio.Random
 
@@ -21,7 +21,7 @@ object Exercices extends zio.ZIOAppDefault {
     import zio.ZIO
 
     def writeFile(file: String, text: String): Unit = {
-      import java.io._
+      import java.io.*
       val pw = new PrintWriter(new File(file))
       try pw.write(text)
       finally pw.close
@@ -32,8 +32,8 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice3 {
 
-    import Exercice1._
-    import Exercice2._
+    import Exercice1.*
+    import Exercice2.*
 
     def copyFile(source: String, dest: String): Unit = {
       val contents = readFile(source)
@@ -110,7 +110,7 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice7 {
 
-    import Exercice6._
+    import Exercice6.*
 
     /**
      * Collects in a list the results of successful ZIO effect (ignoring errors)
@@ -125,7 +125,7 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice8 {
 
-    import Exercice6._
+    import Exercice6.*
 
     /**
      * Collects in a list the results of successful ZIO effects (ignoring errors)
@@ -138,7 +138,7 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice9 {
 
-    import Exercice6._
+    import Exercice6.*
 
     /**
      * The function should return an effect that tries the left-hand side, but if that effect fails,
@@ -155,8 +155,8 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice10 {
 
-    import zio._
-    import Exercice1._
+    import Exercice1.*
+    import zio.*
 
     object Cat extends ZIOAppDefault {
       def run = {
@@ -171,7 +171,7 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice11 {
 
-    import zio._
+    import zio.*
 
     def eitherToZIO[E, A](either: Either[E, A]): ZIO[Any, E, A]
     = either match {
@@ -182,7 +182,7 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice12 {
 
-    import zio._
+    import zio.*
 
     def listToZIO[A](list: List[A]): ZIO[Any, None.type, A] =
       if (list.isEmpty) ZIO.fail(None) else ZIO.succeed(list.head)
@@ -190,7 +190,7 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice13 {
 
-    import zio._
+    import zio.*
 
     def currentTime(): Long = java.lang.System.currentTimeMillis()
 
@@ -199,7 +199,7 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice14 {
 
-    import zio._
+    import zio.*
 
     def getCacheValue(
                        key: String,
@@ -214,7 +214,7 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice15 {
 
-    import zio._
+    import zio.*
 
     trait User
 
@@ -230,7 +230,8 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice16 {
 
-    import zio._
+    import zio.*
+
     import scala.concurrent.{ExecutionContext, Future}
 
     trait Query
@@ -246,7 +247,7 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice17 {
 
-    import zio._
+    import zio.*
 
     object HelloHuman extends ZIOAppDefault {
       val run = for {
@@ -259,7 +260,7 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice18 {
 
-    import zio._
+    import zio.*
 
     import java.io.IOException
 
@@ -297,7 +298,7 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice19 {
 
-    import zio._
+    import zio.*
 
     import java.io.IOException
 
@@ -313,7 +314,7 @@ object Exercices extends zio.ZIOAppDefault {
 
   object Exercice20 {
 
-    import zio._
+    import zio.*
 
     def doWhile[R, E, A](body: ZIO[R, E, A])(condition: A => Boolean): ZIO[R, E, A] =
       for {
@@ -326,39 +327,39 @@ object Exercices extends zio.ZIOAppDefault {
   override def run: zio.ZIO[Any with zio.ZIOAppArgs with zio.Scope, Any, Any] = { //Toy model ZIO instances
     zio.ZIO.attempt({
       { //Using zipWith
-        import Exercice6._
+        import Exercice6.*
         zipWith[Int, String, Int, Int, Int](ZIO(_ => Right(1)), ZIO(_ => Right(3)))((a, b) => a + b).run(0).fold(println, println)
       }
       { //Using collectAll
-        import Exercice6._
-        import Exercice7._
+        import Exercice6.*
+        import Exercice7.*
         collectAll[Int, String, Int](List(ZIO(_ => Right(1)), ZIO(_ => Left("Error")), ZIO(_ => Right(2)))).run(0).fold(println, println)
       }
       { //Using foreach
-        import Exercice6._
-        import Exercice8._
+        import Exercice6.*
+        import Exercice8.*
         foreach[Int, String, Int, Double](1 to 10)(i => ZIO(r => if (i == 4) Left("Error") else Right(i / 2.0))).run(0).fold(println, println)
       }
       { //Using orElse
-        import Exercice6._
-        import Exercice9._
+        import Exercice6.*
+        import Exercice9.*
         orElse[Int, String, Int, Double](ZIO(r => Right(1)), ZIO(r => Right(2))).run(0).fold(println, println)
         orElse[Int, String, Int, Double](ZIO(r => Left("Error")), ZIO(r => Right(2))).run(0).fold(println, println)
       }
     })
   } *> { //Normal ZIO
     { //Using HelloHumain
-      import Exercice17._
+      import Exercice17.*
       HelloHuman.run
     } *> { //Using NumberGuessing
-      import Exercice18._
+      import Exercice18.*
       NumberGuessing.run
     } *> { //Using ReadUntil
-      import Exercice19._
+      import Exercice19.*
       zio.Console.printLine("Type the word true") *>
         readUntil(txt => txt.toLowerCase.contains("true"))
     } *> { //Using doWhile
-      import Exercice20._
+      import Exercice20.*
       doWhile((
         for {
           num <- zio.Random.nextIntBounded(75)

@@ -11,6 +11,7 @@ This repository is based on the book version : *2025-08-28: Sixth Release*
 - Essentials :
   - First steps with ZIO
   - Testing with ZIO
+  - Error model
   - Integrating third party libraries with ZIO
 - Concurrency & Parallelism
 - Concurrent Structures
@@ -25,7 +26,7 @@ This repository is based on the book version : *2025-08-28: Sixth Release*
 - Applications : Parallel Web Crawler
 
 ## Repository structure :
-- `Package` by *subject*
+- `Package` by *chapter*
 - Two `sub-packages` inside each subject :
   - `chapter` package : practicing chapter code
   - `exercices` package : solving exercices (at the end of each chapter there is a list of exercices to solve)
