@@ -1,6 +1,7 @@
 # ZIOnomicon Book practicing
 
 ## Book :
+
 You can get a free copy of the book the [official website](https://www.zionomicon.com/) :
 ![Cover](https://www.zionomicon.com/images/min/book-img.png)
 *Image from the book website*
@@ -8,11 +9,12 @@ You can get a free copy of the book the [official website](https://www.zionomico
 This repository is based on the book version : *2025-08-28: Sixth Release*
 
 ## Subjects :
+
 - Essentials :
-  - First steps with ZIO
-  - Testing with ZIO
-  - Error model
-  - Integrating third party libraries with ZIO
+    - First steps with ZIO
+    - Testing with ZIO
+    - Error model
+    - Integrating third party libraries with ZIO
 - Concurrency & Parallelism
 - Concurrent Structures
 - Resource Handling
@@ -26,21 +28,27 @@ This repository is based on the book version : *2025-08-28: Sixth Release*
 - Applications : Parallel Web Crawler
 
 ## Repository structure :
+
 - `Package` by *chapter*
 - Two `sub-packages` inside each subject :
-  - `chapter` package : practicing chapter code
-  - `exercices` package : solving exercices (at the end of each chapter there is a list of exercices to solve)
+    - `chapter` package : practicing chapter code
+    - `exercices` package : solving exercices (at the end of each chapter there is a list of exercices to solve)
 
 Here the final structure. I will update it as i am progressing :
-- ch01_firststepswithzio :
-  - chapter
-    - ch1.scala (current)
+
+- chapter 1
+    - subchapter 1.1
+    - subchapter 1.2
+    - subchapter 1.3
+    - subchapter 1.4 (TODO)
 
 ## Technologies :
+
 - Scala 3.7.3
 - sbt 1.11.6
 - ZIO 2
 - JDK 21
 
 ## Contributors :
+
 - NOUNI EL Bachir (aka enimiste)
