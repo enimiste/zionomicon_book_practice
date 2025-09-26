@@ -31,6 +31,11 @@ This repository is based on the book version : *2025-08-28: Sixth Release*
   - `chapter` package : practicing chapter code
   - `exercices` package : solving exercices (at the end of each chapter there is a list of exercices to solve)
 
+Here the final structure. I will update it as i am progressing :
+- ch01_firststepswithzio :
+  - chapter
+    - ch1.scala (current)
+
 ## Technologies :
 - Scala 3.7.3
 - sbt 1.11.6
