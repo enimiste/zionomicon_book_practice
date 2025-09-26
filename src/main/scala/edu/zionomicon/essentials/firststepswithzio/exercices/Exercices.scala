@@ -1,4 +1,3 @@
-package edu.zionomicon
 package edu.zionomicon.essentials.firststepswithzio.exercices
 
 import zio.Random
