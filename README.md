@@ -40,7 +40,8 @@ Here the final structure. I will update it as i am progressing :
     - subchapter 1.1
     - subchapter 1.2
     - subchapter 1.3
-    - subchapter 1.4 (TODO)
+    - subchapter 1.4
+    - subchapter 1.5 (TODO)
 
 ## Technologies :
 
